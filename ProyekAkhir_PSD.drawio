@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" modified="2023-12-15T11:59:21.435Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="vsqPB80Ds_f3RVa-f6eL" version="22.1.9" type="device">
+  <diagram name="Page-1" id="1WDqgXkMvDE3ou7cJ84F">
+    <mxGraphModel dx="2140" dy="557" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="geZDU8rb3LCOGiETENGQ-1" value="ID kartu : 8 bit" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="50" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-3" value="Timestamp unix : 32 bit" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="80" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-4" value="Opcode : 3 bit" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="110" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-7" value="000 remove (buat ngehapus di memori kalau udh keluar)&lt;br&gt;001 sub (cari selisih timestamp sama saldo baru)&lt;br&gt;mul (cari harga yg perlu dijual)&lt;br&gt;put (nyimpen data baru masuk)&lt;br&gt;save txt (nyimpen transaksi yg berhasil ke txt)&lt;br&gt;get empty spot (cari jumlah parkiran yg kosong)&lt;br&gt;set time(ubah timestamp pada saat itu)&lt;br&gt;get time (buat nampilin waktu masuk ke user)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="140" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-9" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="30" y="50" width="370" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-11" value="main computer" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="30" y="20" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-16" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="410" y="50" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-18" value="menyimpan timestamp masuk dan id kartu&lt;br&gt;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="geZDU8rb3LCOGiETENGQ-16" vertex="1">
+          <mxGeometry width="275" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-19" value="vector 40 bit (dari 32 + 8) berjumlah sesuai dengan bit address nya misal 6 bit jd ada 64" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="geZDU8rb3LCOGiETENGQ-16" vertex="1">
+          <mxGeometry y="30" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-17" value="memory" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="410" y="20" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-20" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="-370" y="50" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-21" value="menyimpan timestamp masuk dan id kartu&lt;br&gt;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="geZDU8rb3LCOGiETENGQ-20" vertex="1">
+          <mxGeometry width="275" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-22" value="Mengirim jam masuk , id kartu" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="geZDU8rb3LCOGiETENGQ-20" vertex="1">
+          <mxGeometry y="30" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-23" value="Interface masuk" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-370" y="20" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-24" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="-370" y="190" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-25" value="menyimpan timestamp masuk dan id kartu&lt;br&gt;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="geZDU8rb3LCOGiETENGQ-24" vertex="1">
+          <mxGeometry width="275" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-26" value="ngirim jam keluar , id kartu, dan jumlah uang baru" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="geZDU8rb3LCOGiETENGQ-24" vertex="1">
+          <mxGeometry y="30" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="geZDU8rb3LCOGiETENGQ-27" value="Interface keluar" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-370" y="160" width="120" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
