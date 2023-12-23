@@ -42,6 +42,7 @@ begin
                         next_state <= GET_TIMESTAMP;
                     end if;
                 when CARDID_TIMESTAMP =>
+                    DATA_IN(31 DOWNTO 0) <= DATA_OUT(31 DOWNTO 0);
                     if DONE = '1' then
                         next_state <= STAND_BY;
                     else
