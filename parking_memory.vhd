@@ -1,7 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 entity parking_memory is
@@ -19,6 +18,7 @@ architecture behavioral of parking_memory is
 
     type memory_type is array (0 to 255) of std_logic_vector(63 downto 0); -- 256 entries
     signal memory_array : memory_type;
+    signal addr_temp : integer;
 
     begin
     process(clk, rst)
@@ -27,11 +27,12 @@ architecture behavioral of parking_memory is
                 memory_array <= (others => (others => '0'));  -- Initialize to zero
             elsif rising_edge(clk) then
                 if wr_en = '1' then
-                    memory_array(conv_integer(addr)) <= data_in;
+                    addr_temp <= to_integer(unsigned(addr));
+                    memory_array(addr_temp) <= data_in;
                 end if;
             end if;
     end process;
 
-    data_out <= memory_array(conv_integer(addr));
+    data_out <= memory_array(addr_temp);
 
 end architecture behavioral;
