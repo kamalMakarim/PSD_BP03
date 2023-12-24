@@ -22,12 +22,12 @@ architecture rtl of computer is
             CPU_NOT_READY : IN STD_LOGIC;
             DATA_OUT : IN STD_LOGIC_VECTOR (63 DOWNTO 0);
             CARD_ID : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-            YEAR : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-            MONTH : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            DAY : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-            HOUR : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-            MINUTE : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-            SECOND : OUT STD_LOGIC_VECTOR(5 DOWNTO 0)
+            YEAR : OUT INTEGER;
+            MONTH : OUT integer;
+            DAY : OUT integer;
+            HOUR : OUT integer;
+            MINUTE : OUT integer;
+            SECOND : OUT integer
         );
     end component interfaceMasuk;
 
@@ -41,12 +41,12 @@ architecture rtl of computer is
             CPU_NOT_READY : IN STD_LOGIC;
             DATA_OUT : IN STD_LOGIC_VECTOR (63 DOWNTO 0);
             CARD_ID : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-            YEAR : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-            MONTH : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            DAY : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-            HOUR : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-            MINUTE : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-            SECOND : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+            YEAR : OUT INTEGER;
+            MONTH : OUT integer;
+            DAY : OUT integer;
+            HOUR : OUT integer;
+            MINUTE : OUT integer;
+            SECOND : OUT integer
             BALANCE : OUT STD_LOGIC_VECTOR(63 DOWNTO 0)
         );
     end component interfaceKeluar;
@@ -93,18 +93,18 @@ architecture rtl of computer is
     signal want_to_use2 : std_logic;
     signal cpu_not_ready1 : std_logic;
     signal cpu_not_ready2 : std_logic;
-    signal year1 : std_logic_vector(15 downto 0);
-    signal year2 : std_logic_vector(15 downto 0);
-    signal month1 : std_logic_vector(3 downto 0);
-    signal month2 : std_logic_vector(3 downto 0);
-    signal day1 : std_logic_vector(4 downto 0);
-    signal day2 : std_logic_vector(4 downto 0);
-    signal hour1 : std_logic_vector(4 downto 0);
-    signal hour2 : std_logic_vector(4 downto 0);
-    signal minute1 : std_logic_vector(5 downto 0);
-    signal minute2 : std_logic_vector(5 downto 0);
-    signal second1 : std_logic_vector(5 downto 0);
-    signal second2 : std_logic_vector(5 downto 0);
+    signal year1 : integer;
+    signal year2 : integer;
+    signal month1 : integer;
+    signal month2 : integer;
+    signal day1 : integer;
+    signal day2 : integer;
+    signal hour1 : integer;
+    signal hour2 : integer;
+    signal minute1 : integer;
+    signal minute2 : integer;
+    signal second1 : integer;
+    signal second2 : integer;
     signal card_id1 : std_logic_vector(31 downto 0);
     signal card_id2 : std_logic_vector(31 downto 0);
 begin
