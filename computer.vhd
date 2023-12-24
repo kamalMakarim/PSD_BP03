@@ -174,16 +174,12 @@ begin
                 operandA <= instruction2(5 downto 3);
                 operandB <= instruction2(2 downto 0);
                 data_in <= data_in1;
-                data_out <= data_out1;
-                done <= done1;
             elsif want_to_use2 = '1' then
                 opcode <= instruction2(10 downto 8);
                 mode <= instruction2(7 downto 6);
                 operandA <= instruction2(5 downto 3);
                 operandB <= instruction2(2 downto 0);
                 data_in <= data_in2;
-                data_out <= data_out2;
-                done <= done2;
             end if;
             done <= '0';
             shift <= '0';
@@ -405,6 +401,14 @@ begin
                 when others => 
                     report "Error: opcode not recognized" severity error;
             end case;
+
+            if want_to_use1 = '1' then
+                data_out1 <= data_out;
+                done1 <= done;
+            elsif want_to_use2 = '1' then
+                data_out2 <= data_out;
+                done2 <= done;
+            end if;
         end if;
     end process;
 end architecture rtl;
