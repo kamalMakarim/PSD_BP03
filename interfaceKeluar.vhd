@@ -142,8 +142,17 @@ architecture rtl of interfaceKeluar is
     BEGIN
         RETURN (seconds MOD 60);
     END FUNCTION;
+    signal unix_timestamp : STD_LOGIC_VECTOR (31 DOWNTO 0);
 begin
     process(CLK)
+        variable timestamp_seconds : integer;
+        variable sec : integer;
+        variable min : integer; 
+        variable hr : integer;
+        variable yr : integer;
+        variable mnth : integer;
+        variable dy : integer;
+
     begin
         if rising_edge(CLK) then
             case next_state is
@@ -194,13 +203,18 @@ begin
                     DATA_IN(31 DOWNTO 0) <= DATA_OUT(63 DOWNTO 32);
                     DATA_IN(63 DOWNTO 32) <= (OTHERS => '0');
                     unix_timestamp <= DATA_OUT(31 DOWNTO 0);
-                    timestamp_seconds <= to_integer(unsigned(unix_timestamp));
-                    YEAR := calculate_year(timestamp_seconds);
-                    MONTH := calculate_month(timestamp_seconds, YEAR);
-                    DAY := calculate_day(timestamp_seconds, YEAR, MONTH);
-                    HOUR := calculate_hour(timestamp_seconds);
-                    MINUTE := calculate_minute(timestamp_seconds);
-                    SECOND := calculate_second(timestamp_seconds);
+                    timestamp_seconds := to_integer(unsigned(unix_timestamp));
+                    sec := calculate_second(timestamp_seconds);
+                    min := calculate_minute(timestamp_seconds);
+                    hr := calculate_hour(timestamp_seconds);
+                    yr := calculate_year(timestamp_seconds);
+                    mnth := calculate_month(timestamp_seconds, yr);
+                    SECOND <= sec;
+                    MINUTE <= min;
+                    HOUR <= hr;
+                    YEAR <= yr;
+                    MONTH <= mnth;
+                    DAY <= dy;
                     if DONE = '1' then
                         next_state <= mov_R4_data_in_1;
                     else
@@ -251,14 +265,6 @@ begin
                 when remove_cardid => -- Menghapus Card ID, menyisakan timestamp
                     DATA_IN(63 downto 32) <= (OTHERS => '0');
                     DATA_IN(31 downto 0) <= DATA_OUT(31 downto 0);
-                    unix_timestamp <= DATA_OUT(31 DOWNTO 0);
-                    timestamp_seconds <= to_integer(unsigned(unix_timestamp));
-                    YEAR := calculate_year(timestamp_seconds);
-                    MONTH := calculate_month(timestamp_seconds, YEAR);
-                    DAY := calculate_day(timestamp_seconds, YEAR, MONTH);
-                    HOUR := calculate_hour(timestamp_seconds);
-                    MINUTE := calculate_minute(timestamp_seconds);
-                    SECOND := calculate_second(timestamp_seconds);
                     if DONE = '1' then
                         next_state <= mov_R3_data_in_2;
                     else
@@ -274,13 +280,19 @@ begin
                 when get_timestamp => -- Get timestamp saat kendaraan keluar
                     INSTRUCTION <= "01100000000";
                     unix_timestamp <= DATA_OUT(31 DOWNTO 0);
-                    timestamp_seconds <= to_integer(unsigned(unix_timestamp));
-                    YEAR := calculate_year(timestamp_seconds);
-                    MONTH := calculate_month(timestamp_seconds, YEAR);
-                    DAY := calculate_day(timestamp_seconds, YEAR, MONTH);
-                    HOUR := calculate_hour(timestamp_seconds);
-                    MINUTE := calculate_minute(timestamp_seconds);
-                    SECOND := calculate_second(timestamp_seconds);
+                    timestamp_seconds := to_integer(unsigned(unix_timestamp));
+                    sec := calculate_second(timestamp_seconds);
+                    min := calculate_minute(timestamp_seconds);
+                    hr := calculate_hour(timestamp_seconds);
+                    yr := calculate_year(timestamp_seconds);
+                    mnth := calculate_month(timestamp_seconds, yr);
+                    dy := calculate_day(timestamp_seconds, yr, mnth);
+                    SECOND <= sec;
+                    MINUTE <= min;
+                    HOUR <= hr;
+                    YEAR <= yr;
+                    MONTH <= mnth;
+                    DAY <= dy;
                     if DONE = '1' then
                         next_state <= mov_R4_data_in_2;
                     else

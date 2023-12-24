@@ -144,12 +144,20 @@ BEGIN
                     DATA_IN (31 DOWNTO 0) <= DATA_OUT(31 DOWNTO 0);
                     unix_timestamp <= DATA_OUT(31 DOWNTO 0);
                     timestamp_seconds <= to_integer(unsigned(unix_timestamp));
-                    YEAR := calculate_year(timestamp_seconds);
-                    MONTH := calculate_month(timestamp_seconds, YEAR);
-                    DAY := calculate_day(timestamp_seconds, YEAR, MONTH);
-                    HOUR := calculate_hour(timestamp_seconds);
-                    MINUTE := calculate_minute(timestamp_seconds);
-                    SECOND := calculate_second(timestamp_seconds);
+                    sec := calculate_second(timestamp_seconds);
+                    min := calculate_minute(timestamp_seconds);
+                    hr := calculate_hour(timestamp_seconds);
+                    yr := calculate_year(timestamp_seconds);
+                    mnth := calculate_month(timestamp_seconds, yr);
+                    dy := calculate_day(timestamp_seconds, yr, mnth);
+                    SECOND <= sec;
+                    MINUTE <= min;
+                    HOUR <= hr;
+                    YEAR <= yr;
+                    MONTH <= mnth;
+                    DAY <= dy;
+    
+                    next_state <= MOV_TO_REG;
                 WHEN MOV_TO_REG =>
                     INSTRUCTION <= "01110010000";
                 WHEN MOV_TO_MEM =>

@@ -46,8 +46,8 @@ architecture rtl of computer is
             DAY : OUT integer;
             HOUR : OUT integer;
             MINUTE : OUT integer;
-            SECOND : OUT integer
-            BALANCE : OUT STD_LOGIC_VECTOR(63 DOWNTO 0)
+            SECOND : OUT integer;
+            BALANCE : INOUT STD_LOGIC_VECTOR(63 DOWNTO 0)
         );
     end component interfaceKeluar;
 
