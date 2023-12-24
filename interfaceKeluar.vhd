@@ -12,6 +12,12 @@ entity interfaceKeluar is
         CPU_NOT_READY : IN STD_LOGIC;
         DATA_OUT : IN STD_LOGIC_VECTOR (63 DOWNTO 0);
         CARD_ID : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        YEAR : OUT INTEGER;
+        MONTH : OUT integer;
+        DAY : OUT integer;
+        HOUR : OUT integer;
+        MINUTE : OUT integer;
+        SECOND : OUT integer;
         BALANCE : INOUT STD_LOGIC_VECTOR (63 DOWNTO 0)
     );
 end entity interfaceKeluar;
@@ -45,8 +51,108 @@ architecture rtl of interfaceKeluar is
         save);
     signal next_state : state_type := stand_by;
     
+    -- Function to check leap year
+    FUNCTION is_leap_year(yr : INTEGER) RETURN BOOLEAN IS
+    BEGIN
+        if yr mod 4 = 0 then
+            RETURN TRUE;
+        else 
+            return FALSE;
+        end if;
+    END FUNCTION;
+
+    -- Year conversion function
+    FUNCTION calculate_year(seconds : INTEGER) RETURN INTEGER IS
+        VARIABLE year : INTEGER := 1970;
+        VARIABLE year_seconds : INTEGER;
+        VARIABLE Seconds_var : INTEGER := seconds;
+    BEGIN
+        WHILE Seconds_var > 0 LOOP
+            year_seconds := 365 * 24 * 60 * 60;
+            IF is_leap_year(year) THEN
+                year_seconds := year_seconds + 24 * 60 * 60; -- Add a day for leap year
+            END IF;
+            IF Seconds_var < year_seconds THEN
+                EXIT;
+            ELSE
+                Seconds_var := seconds - year_seconds;
+                year := year + 1;
+            END IF;
+        END LOOP;
+        RETURN year;
+    END FUNCTION;
+
+    -- Month conversion function
+    FUNCTION calculate_month(seconds : INTEGER; yr : INTEGER) RETURN INTEGER IS
+        type month_array is array (1 to 12) of integer;
+        VARIABLE months : month_array := (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+        VARIABLE month : INTEGER := 1;
+        VARIABLE month_seconds : INTEGER;
+        variable Seconds_var : INTEGER := seconds;
+    BEGIN
+        IF is_leap_year(yr) THEN
+            months(2) := 29; -- February has 29 days in a leap year
+        END IF;
+        FOR i IN 1 TO 12 LOOP
+            month_seconds := months(i) * 24 * 60 * 60;
+            IF Seconds_var < month_seconds THEN
+                EXIT;
+            ELSE
+                Seconds_var := Seconds_var - month_seconds;
+                month := month + 1;
+            END IF;
+        END LOOP;
+        RETURN month;
+    END FUNCTION;
+
+    -- Day conversion function
+    FUNCTION calculate_day(seconds : INTEGER; yr : INTEGER; mnth : INTEGER) RETURN INTEGER IS
+        type month_array is array (1 to 12) of integer;
+        VARIABLE months : month_array := (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+        VARIABLE day : INTEGER := 1;
+        VARIABLE day_seconds : INTEGER;
+        variable seconds_var : INTEGER := seconds;
+    BEGIN
+        IF is_leap_year(yr) AND mnth = 2 THEN
+            day_seconds := 29 * 24 * 60 * 60; -- February in a leap year
+        ELSE
+            day_seconds := months(mnth) * 24 * 60 * 60;
+        END IF;
+        WHILE seconds_var >= day_seconds LOOP
+            seconds_var := seconds_var - day_seconds;
+            day := day + 1;
+        END LOOP;
+        RETURN day;
+    END FUNCTION;
+
+    -- Hour conversion function
+    FUNCTION calculate_hour(seconds : INTEGER) RETURN INTEGER IS
+    BEGIN
+        RETURN (seconds / 3600); -- 3600 seconds in an hour
+    END FUNCTION;
+
+    -- Minute conversion function
+    FUNCTION calculate_minute(seconds : INTEGER) RETURN INTEGER IS
+    BEGIN
+        RETURN ((seconds MOD 3600) / 60); -- 60 seconds in a minute
+    END FUNCTION;
+
+    -- Second conversion function
+    FUNCTION calculate_second(seconds : INTEGER) RETURN INTEGER IS
+    BEGIN
+        RETURN (seconds MOD 60);
+    END FUNCTION;
+    signal unix_timestamp : STD_LOGIC_VECTOR (31 DOWNTO 0);
 begin
     process(CLK)
+        variable timestamp_seconds : integer;
+        variable sec : integer;
+        variable min : integer; 
+        variable hr : integer;
+        variable yr : integer;
+        variable mnth : integer;
+        variable dy : integer;
+
     begin
         if rising_edge(CLK) then
             case next_state is
@@ -96,6 +202,19 @@ begin
                 when remove_timestamp => -- Mencari Card ID yang sesuai (6)
                     DATA_IN(31 DOWNTO 0) <= DATA_OUT(63 DOWNTO 32);
                     DATA_IN(63 DOWNTO 32) <= (OTHERS => '0');
+                    unix_timestamp <= DATA_OUT(31 DOWNTO 0);
+                    timestamp_seconds := to_integer(unsigned(unix_timestamp));
+                    sec := calculate_second(timestamp_seconds);
+                    min := calculate_minute(timestamp_seconds);
+                    hr := calculate_hour(timestamp_seconds);
+                    yr := calculate_year(timestamp_seconds);
+                    mnth := calculate_month(timestamp_seconds, yr);
+                    SECOND <= sec;
+                    MINUTE <= min;
+                    HOUR <= hr;
+                    YEAR <= yr;
+                    MONTH <= mnth;
+                    DAY <= dy;
                     if DONE = '1' then
                         next_state <= mov_R4_data_in_1;
                     else
@@ -160,6 +279,20 @@ begin
                     end if;
                 when get_timestamp => -- Get timestamp saat kendaraan keluar
                     INSTRUCTION <= "01100000000";
+                    unix_timestamp <= DATA_OUT(31 DOWNTO 0);
+                    timestamp_seconds := to_integer(unsigned(unix_timestamp));
+                    sec := calculate_second(timestamp_seconds);
+                    min := calculate_minute(timestamp_seconds);
+                    hr := calculate_hour(timestamp_seconds);
+                    yr := calculate_year(timestamp_seconds);
+                    mnth := calculate_month(timestamp_seconds, yr);
+                    dy := calculate_day(timestamp_seconds, yr, mnth);
+                    SECOND <= sec;
+                    MINUTE <= min;
+                    HOUR <= hr;
+                    YEAR <= yr;
+                    MONTH <= mnth;
+                    DAY <= dy;
                     if DONE = '1' then
                         next_state <= mov_R4_data_in_2;
                     else
