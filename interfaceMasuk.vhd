@@ -223,6 +223,7 @@ begin
                         BALANCE <= DATA_OUT;
                         next_state <= SAVE;
                     else
+                        REPORT "Balance anda tidak cukup" SEVERITY FAILURE;
                         next_state <= check_balance;
                     end if;
                 when SAVE =>
