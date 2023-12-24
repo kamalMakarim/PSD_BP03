@@ -1,5 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;library IEEE;
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 entity interfaceKeluar is
@@ -12,7 +14,14 @@ entity interfaceKeluar is
         CPU_NOT_READY : IN STD_LOGIC;
         DATA_OUT : IN STD_LOGIC_VECTOR (63 DOWNTO 0);
         CARD_ID : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-        BALANCE : INOUT STD_LOGIC_VECTOR (63 DOWNTO 0)
+        BALANCE : INOUT STD_LOGIC_VECTOR (63 DOWNTO 0);
+        
+        year      : out STD_LOGIC_VECTOR (15 downto 0);
+        month     : out STD_LOGIC_VECTOR (3 downto 0);
+        day       : out STD_LOGIC_VECTOR (4 downto 0);
+        hour      : out STD_LOGIC_VECTOR (4 downto 0);
+        minute    : out STD_LOGIC_VECTOR (5 downto 0);
+        second    : out STD_LOGIC_VECTOR (5 downto 0)
     );
 end entity interfaceKeluar;
 
@@ -46,6 +55,36 @@ architecture rtl of interfaceKeluar is
     signal next_state : state_type := stand_by;
     
 begin
+    process(DATA_OUT)
+        variable ts : integer;
+    begin
+        INSTRUCTION <= "01100000000";
+
+        ts := to_integer(unsigned(DATA_OUT(31 downto 0)));
+
+        -- Konversi tahun
+        year <= std_logic_vector(to_unsigned((ts / (365 * 24 * 60 * 60) + 1970), 16));
+
+        -- Konversi bulan
+        ts := ts mod (365 * 24 * 60 * 60);
+        month <= std_logic_vector(to_unsigned((ts / (31 * 24 * 60 * 60) + 1), 4));
+
+        -- Konversi hari
+        ts := ts mod (31 * 24 * 60 * 60);
+        day <= std_logic_vector(to_unsigned((ts / (24 * 60 * 60) - 10), 5));
+
+        -- Konversi jam
+        ts := ts mod (24 * 60 * 60);
+        hour <= std_logic_vector(to_unsigned((ts / (60 * 60) + 7), 5));
+
+        -- Konversi menit
+        ts := ts mod (60 * 60);
+        minute <= std_logic_vector(to_unsigned(ts / 60, 6));
+
+        -- Konversi detik
+        second <= std_logic_vector(to_unsigned(ts mod 60, 6));
+    end process;
+
     process(CLK)
     begin
         if rising_edge(CLK) then
